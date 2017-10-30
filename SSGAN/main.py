@@ -25,7 +25,7 @@ import numpy as np
 import tensorflow as tf
 import argparse
 from time import gmtime, strftime
-
+np.random.seed(42)
 
 #Load the images from the given directory
 #Images should be saved like:
@@ -432,9 +432,9 @@ def model_loss(input_real, input_z, output_dim, y, num_classes, label_mask, alph
 
     # Here we run the generator and the discriminator
     g_model = generator(input_z, output_dim, alpha=alpha, size_mult=g_size_mult)
-    d_on_data = discriminator(input_real, alpha=alpha, drop_rate=drop_rate, size_mult=d_size_mult)
+    d_on_data = discriminator(input_real, alpha=alpha, drop_rate=drop_rate, num_classes=num_classes, size_mult=d_size_mult)
     d_model_real, class_logits_on_data, gan_logits_on_data, data_features = d_on_data
-    d_on_samples = discriminator(g_model, reuse=True, alpha=alpha, drop_rate=drop_rate, size_mult=d_size_mult)
+    d_on_samples = discriminator(g_model, reuse=True, alpha=alpha, drop_rate=drop_rate,num_classes=num_classes, size_mult=d_size_mult)
     d_model_fake, class_logits_on_samples, gan_logits_on_samples, sample_features = d_on_samples
 
     # Here we compute `d_loss`, the loss for the discriminator.
@@ -511,7 +511,7 @@ class GAN:
     :param beta1: The beta1 parameter for Adam.
     """
 
-    def __init__(self, real_size, z_size, learning_rate, num_classes=10, alpha=0.2, beta1=0.5):
+    def __init__(self, real_size, z_size, learning_rate, num_classes, alpha=0.2, beta1=0.5):
         tf.reset_default_graph()
 
         self.learning_rate = tf.Variable(learning_rate, trainable=False)
@@ -609,12 +609,12 @@ def train(net, dataset, epochs, batch_size, z_size, figsize=(5, 5)):
 ####MAIN####
 def main():
     parser = argparse.ArgumentParser(description='Model parameters.')
-    parser.add_argument('--batch_size', type=int, default=32)
+    parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--dataset', type=str, default='Top_10', choices=['Top_10', 'Top_20', 'Top_30', 'Top_41'])
-    parser.add_argument('--learning_rate', type=float, default=0.1)
+    parser.add_argument('--learning_rate', type=float, default=0.001)
     #parser.add_argument('--update_rate', type=int, default=5)
-    parser.add_argument('--epochs', type=int, default=100)
-    parser.add_argument('--z_size', type=int, default=100)
+    parser.add_argument('--epochs', type=int, default=200)
+    parser.add_argument('--z_size', type=int, default=50)
     parser.add_argument('--num_classes', type=int, default=10)
     parser.add_argument('--dropout_rate', type=float, default=0.5)
     parser.add_argument('--alpha', type=float, default=0.2)
@@ -638,7 +638,7 @@ def main():
 
     #Create and load data
     load_create_data(args.data_dir)
-    net = GAN(real_size, args.z_size, args.learning_rate)
+    net = GAN(real_size, args.z_size, args.learning_rate, args.num_classes)
     global dataset
     dataset = Dataset(trainset, testset)
     train_accuracies, test_accuracies, samples = train(net, dataset, args.epochs, args.batch_size, args.z_size, figsize=(10, 5))
