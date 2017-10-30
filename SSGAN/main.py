@@ -1,26 +1,48 @@
-try:
-    import sys
-    import os
-    import pickle as pkl
-    import time
-    import scipy
-    #import matplotlib.pyplot as plt
-    import scipy.misc
-    import numpy as np
-    #from scipy.io import loadmat
-    import tensorflow as tf
-    import argparse
-    from time import gmtime, strftime
-except ImportError as e:
-    print(e)
+#try:
+#    import sys
+#    import os
+#    import pickle as pkl
+#    import time
+#    import scipy
+#    #import matplotlib.pyplot as plt
+#    import scipy.misc
+#    import numpy as np
+#    #from scipy.io import loadmat
+#    import tensorflow as tf
+#    import argparse
+#    from time import gmtime, strftime
+#except ImportError as e:
+#    print(e)
 
 
+import sys
+import os
+import pickle as pkl
+import time
+import scipy
+import scipy.misc
+import numpy as np
+import tensorflow as tf
+import argparse
+from time import gmtime, strftime
+
+
+#Load the images from the given directory
+#Images should be saved like:
+#Parent Dir-
+#-----------Class 1
+#----------------Image_1.jpg
+#----------------Image_2.jpg
+#----------------Image_3.jpg
+#----------------....
+#----------------Image_m.jpg
+#-----------Class 2
+#-----------Class 3
+# . . .
+#-----------Class n
 def load_create_data(DATA_DIR):
     global extra_class
     extra_class = 0
-
-    #LOADING THE DATA
-    #DATA_DIR = '/Users/nouraahmed/Desktop/Top_10_no_aug'
     DATA_DIR = DATA_DIR
     classes = os.listdir(DATA_DIR)
 
@@ -51,7 +73,6 @@ def load_create_data(DATA_DIR):
     global trainset, testset
     trainset = {'X': None, 'y': None}
     testset = {'X': None, 'y': None}
-
     # Decide what % of the data goes into training
     split = int(0.90 * len(y_data))
     idx = range(len(y_data))
@@ -64,6 +85,7 @@ def load_create_data(DATA_DIR):
     trainset['y'] = y_data[idx[:split]]
     testset['y'] = y_data[idx[split:]]
 
+
 ############################################################
 def scale(x, feature_range=(-1, 1)):
     # scale to (0, 1)
@@ -74,24 +96,22 @@ def scale(x, feature_range=(-1, 1)):
     x = x * (max - min) + min
     return x
 ############################################################
+##### Activation Function #####
 def leaky_relu(x, alpha=0.2, name=None):
     return tf.maximum(alpha * x, x)
 
 ################ CREATING THE DATASET #####################
 class Dataset:
-    def __init__(self, train, test, val_frac=0.5, shuffle=True, scale_func=None):
+    def __init__(self, train, test, val_frac=0.0, shuffle=True, scale_func=None):
         split_idx = int(len(test['y']) * (1 - val_frac))
         self.test_x, self.valid_x = test['X'][:, :, :, :split_idx], test['X'][:, :, :, split_idx:]
         self.test_y, self.valid_y = test['y'][:split_idx], test['y'][split_idx:]
         self.train_x, self.train_y = train['X'], train['y']
-        # The SVHN dataset comes with lots of labels, but for the purpose of this exercise,
-        # we will pretend that there are only 1000.
-        # We use this mask to say which labels we will allow ourselves to use.
         self.label_mask = np.zeros_like(self.train_y)
         self.label_mask[0:len(self.train_y)] = 1
-
+        print(len(self.test_y))
         self.train_x = np.rollaxis(self.train_x, 3)
-        self.valid_x = np.rollaxis(self.valid_x, 3)
+        #self.valid_x = np.rollaxis(self.valid_x, 3)
         self.test_x = np.rollaxis(self.test_x, 3)
 
         if scale_func is None:
@@ -99,7 +119,7 @@ class Dataset:
         else:
             self.scaler = scale_func
         self.train_x = self.scaler(self.train_x)
-        self.valid_x = self.scaler(self.valid_x)
+        #self.valid_x = self.scaler(self.valid_x)
         self.test_x = self.scaler(self.test_x)
         self.shuffle = shuffle
 
@@ -123,14 +143,11 @@ class Dataset:
             y = dataset_y[ii:ii + batch_size]
 
             if which_set == "train":
-                # When we use the data for training, we need to include
-                # the label mask, so we can pretend we don't have access
-                # to some of the labels, as an exercise of our semi-supervised
-                # learning ability
                 yield x, y, self.label_mask[ii:ii + batch_size]
             else:
                 yield x, y
 
+#####################################
 
 def model_inputs(real_dim, z_dim):
     inputs_real = tf.placeholder(tf.float32, (None, *real_dim), name='input_real')
@@ -140,51 +157,209 @@ def model_inputs(real_dim, z_dim):
 
     return inputs_real, inputs_z, y, label_mask
 
+################ Discriminator #####################
+# def discriminator(x, reuse=False, alpha=0.2, drop_rate=0.5, num_classes=10, size_mult=64):
+#     with tf.variable_scope('discriminator', reuse=reuse):
+#         result_file.write("\n##############################################\n")
+#         result_file.write("\nDiscriminator Architecture: ")
+#         x = tf.layers.dropout(x, rate=drop_rate / 2.5)
+#         # d1
+#         result_file.write("\nInput \nConv2d(inputs, filters= 64, kernel_size=3, strides=2, padding='same') \nleaky_relu \nbatch_normalization \nDropout")
+#         x_1 = tf.layers.conv2d(x, size_mult, 3, strides=2, padding='same')
+#         lrelu_1 = leaky_relu(x_1, alpha)
+#         bn_1 = tf.layers.batch_normalization(lrelu_1, training=True)
+#         drop_1 = tf.layers.dropout(bn_1, rate=drop_rate)
+#
+#         # d2
+#         result_file.write("\n\nConv2d(d1, filters= 64, kernel_size=3, strides=2, padding='same') \nleaky_relu \nbatch_normalization \nDropout")
+#
+#         x_2 = tf.layers.conv2d(drop_1, size_mult, 3, strides=2, padding='same')
+#         lrelu_2 = leaky_relu(x_2, alpha)
+#         bn_2 = tf.layers.batch_normalization(lrelu_2, training=True)
+#         drop_2 = tf.layers.dropout(bn_2, rate=drop_rate)
+#
+#         # d3
+#         result_file.write("\n\nConv2d(d2, filters= 64, kernel_size=3, strides=2, padding='same') \nleaky_relu \nbatch_normalization \nDropout")
+#         x_3 = tf.layers.conv2d(drop_2, size_mult, 3, strides=2, padding='same')
+#         lrelu_3 = leaky_relu(x_3, alpha)
+#         bn_3 = tf.layers.batch_normalization(lrelu_3, training=True)
+#         drop_3 = tf.layers.dropout(bn_3, rate=drop_rate)
+#
+#         # d4
+#         result_file.write("\n\nConv2d(d3, filters= 2 * 64, kernel_size=3, strides=1, padding='same') \nleaky_relu \nbatch_normalization \nDropout")
+#         x_4 = tf.layers.conv2d(drop_3, 2 * size_mult, 3, strides=1, padding='same')
+#         lrelu_4 = leaky_relu(x_4, alpha)
+#         bn_4 = tf.layers.batch_normalization(lrelu_4, training=True)
+#         drop_4 = tf.layers.dropout(bn_4, rate=drop_rate)
+#
+#         x_5 = tf.layers.conv2d(drop_4, 2 * size_mult, 3, strides=1, padding='same')
+#         lrelu_5 = leaky_relu(x_5, alpha)
+#         bn_5 = tf.layers.batch_normalization(lrelu_5, training=True)
+#         drop_5 = tf.layers.dropout(bn_5, rate=drop_rate)
+#
+#         x_6 = tf.layers.conv2d(drop_5, 2 * size_mult, 3, strides=1, padding='same')
+#         lrelu_6 = leaky_relu(x_6, alpha)
+#         bn_6 = tf.layers.batch_normalization(lrelu_6, training=True)
+#         drop_6 = tf.layers.dropout(bn_6, rate=drop_rate)
+#
+#         x_7 = tf.layers.conv2d(drop_6, 2 * size_mult, 3, strides=1, padding='same')
+#         lrelu_7 = leaky_relu(x_7, alpha)
+#         bn_7 = tf.layers.batch_normalization(lrelu_7, training=True)
+#         drop_7 = tf.layers.dropout(bn_7, rate=drop_rate)
+#
+#         x_8 = tf.layers.conv2d(drop_7, 2 * size_mult, 3, strides=1, padding='same')
+#         lrelu_8 = leaky_relu(x_8, alpha)
+#         bn_8 = tf.layers.batch_normalization(lrelu_8, training=True)
+#         drop_8 = tf.layers.dropout(bn_8, rate=drop_rate)
+#
+#
+#         x_9 = tf.layers.conv2d(drop_8, 2 * size_mult, 3, strides=1, padding='same')
+#         lrelu_9 = leaky_relu(x_9, alpha)
+#         bn_9 = tf.layers.batch_normalization(lrelu_9, training=True)
+#         drop_9 = tf.layers.dropout(bn_9, rate=drop_rate)
+#
+#         #d5
+#         result_file.write("\n\nConv2d(d4, filters= 2 * 64, kernel_size=3, strides=1, padding='valid') \nleaky_relu")
+#         x_9 = tf.layers.conv2d(drop_9, 2 * size_mult, 3, strides=1, padding='valid')
+#         relu9 = leaky_relu(x_9, alpha)
+#
+#         features = tf.reduce_mean(relu9, (1, 2))
+#         result_file.write("\n\nFC\nSoftMax\n")
+#         class_logits = tf.layers.dense(features, num_classes + extra_class)
+#
+#         if extra_class:
+#             real_class_logits, fake_class_logits = tf.split(class_logits, [num_classes, 1], 1)
+#             assert fake_class_logits.get_shape()[1] == 1, fake_class_logits.get_shape()
+#             fake_class_logits = tf.squeeze(fake_class_logits)
+#         else:
+#             real_class_logits = class_logits
+#             fake_class_logits = 0.
+#
+#         mx = tf.reduce_max(real_class_logits, 1, keep_dims=True)
+#         stable_real_class_logits = real_class_logits - mx
+#
+#         gan_logits = tf.log(tf.reduce_sum(tf.exp(stable_real_class_logits), 1)) + tf.squeeze(mx) - fake_class_logits
+#
+#         out = tf.nn.softmax(class_logits)
+#         result_file.write("\n##############################################\n")
+#         return out, class_logits, gan_logits, features
 
-def discriminator(x, reuse=False, alpha=0.2, drop_rate=0., num_classes=10, size_mult=64):
-
+def discriminator(x, reuse=False, alpha=0.2, drop_rate=0.5, num_classes=10, size_mult=64):
     with tf.variable_scope('discriminator', reuse=reuse):
         result_file.write("\n##############################################\n")
         result_file.write("\nDiscriminator Architecture: ")
-        x = tf.layers.dropout(x, rate=drop_rate / 2.5)
-        # d1
-        result_file.write("\nInput \nConv2d(inputs, filters= 64, kernel_size=3, strides=2, padding='same') \nleaky_relu \nbatch_normalization \nDropout")
-        x_1 = tf.layers.conv2d(x, size_mult, 3, strides=2, padding='same')
+
+
+        x_1 = tf.layers.conv2d(x, 64, [3, 3], [1, 1], padding="same")
         lrelu_1 = leaky_relu(x_1, alpha)
         bn_1 = tf.layers.batch_normalization(lrelu_1, training=True)
         drop_1 = tf.layers.dropout(bn_1, rate=drop_rate)
 
-        # d2
-        result_file.write("\n\nConv2d(d1, filters= 64, kernel_size=3, strides=2, padding='same') \nleaky_relu \nbatch_normalization \nDropout")
 
-        x_2 = tf.layers.conv2d(drop_1, size_mult, 3, strides=2, padding='same')
+        x_2 = tf.layers.conv2d(drop_1, 64, [3, 3], [1, 1], padding="same")
         lrelu_2 = leaky_relu(x_2, alpha)
         bn_2 = tf.layers.batch_normalization(lrelu_2, training=True)
         drop_2 = tf.layers.dropout(bn_2, rate=drop_rate)
 
-        # d3
-        result_file.write("\n\nConv2d(d2, filters= 64, kernel_size=3, strides=2, padding='same') \nleaky_relu \nbatch_normalization \nDropout")
-        x_3 = tf.layers.conv2d(drop_2, size_mult, 3, strides=2, padding='same')
+
+
+        pool_1 = tf.layers.max_pooling2d(drop_2, [ 2, 2], [2, 2], padding="same")
+
+
+        x_3 = tf.layers.conv2d(pool_1, 128, [3, 3], [1, 1], padding="same")
         lrelu_3 = leaky_relu(x_3, alpha)
         bn_3 = tf.layers.batch_normalization(lrelu_3, training=True)
         drop_3 = tf.layers.dropout(bn_3, rate=drop_rate)
 
-        # d4
-        result_file.write("\n\nConv2d(d3, filters= 2 * 64, kernel_size=3, strides=1, padding='same') \nleaky_relu \nbatch_normalization \nDropout")
-        x_4 = tf.layers.conv2d(drop_3, 2 * size_mult, 3, strides=1, padding='same')
+
+        x_4 = tf.layers.conv2d(drop_3, 128, [3, 3], [1, 1], padding="same")
         lrelu_4 = leaky_relu(x_4, alpha)
         bn_4 = tf.layers.batch_normalization(lrelu_4, training=True)
         drop_4 = tf.layers.dropout(bn_4, rate=drop_rate)
 
-        #d5
-        result_file.write("\n\nConv2d(d4, filters= 2 * 64, kernel_size=3, strides=1, padding='valid') \nleaky_relu")
-        x_5 = tf.layers.conv2d(drop_4, 2 * size_mult, 3, strides=1, padding='valid')
-        relu5 = leaky_relu(x_5, alpha)
 
-        features = tf.reduce_mean(relu5, (1, 2))
-        result_file.write("\n\nFC\nSoftMax\n")
+        pool_2 = tf.layers.max_pooling2d(drop_4, [2, 2], [2, 2], padding="same")
+
+        x_5 = tf.layers.conv2d(pool_2, 256, [3, 3], [1, 1], padding="same")
+        lrelu_5 = leaky_relu(x_5, alpha)
+        bn_5 = tf.layers.batch_normalization(lrelu_5, training=True)
+        drop_5 = tf.layers.dropout(bn_5, rate=drop_rate)
+
+
+        x_6 = tf.layers.conv2d(drop_5, 256, [3, 3], [1, 1], padding="same")
+        lrelu_6 = leaky_relu(x_6, alpha)
+        bn_6 = tf.layers.batch_normalization(lrelu_6, training=True)
+        drop_6 = tf.layers.dropout(bn_6, rate=drop_rate)
+
+
+        x_7 = tf.layers.conv2d(drop_6, 256, [3, 3], [1, 1], padding="same")
+        lrelu_7 = leaky_relu(x_7, alpha)
+        bn_7 = tf.layers.batch_normalization(lrelu_7, training=True)
+        drop_7 = tf.layers.dropout(bn_7, rate=drop_rate)
+
+
+        x_8 = tf.layers.conv2d(drop_7, 256, [3, 3], [1, 1], padding="same")
+        lrelu_8 = leaky_relu(x_8, alpha)
+        bn_8 = tf.layers.batch_normalization(lrelu_8, training=True)
+        drop_8 = tf.layers.dropout(bn_8, rate=drop_rate)
+
+
+        pool_3 = tf.layers.max_pooling2d(drop_8, [ 2, 2], [2, 2], padding="same")
+
+        x_9 = tf.layers.conv2d(pool_3, 512, [3, 3], [1, 1], padding="same")
+        lrelu_9 = leaky_relu(x_9, alpha)
+        bn_9 = tf.layers.batch_normalization(lrelu_9, training=True)
+        drop_9 = tf.layers.dropout(bn_9, rate=drop_rate)
+
+
+        x_10 = tf.layers.conv2d(drop_9, 512, [3, 3], [1, 1], padding="same")
+        lrelu_10 = leaky_relu(x_10, alpha)
+        bn_10 = tf.layers.batch_normalization(lrelu_10, training=True)
+        drop_10 = tf.layers.dropout(bn_10, rate=drop_rate)
+
+
+        x_11 = tf.layers.conv2d(drop_10, 512, [3, 3], [1, 1], padding="same")
+        lrelu_11 = leaky_relu(x_11, alpha)
+        bn_11 = tf.layers.batch_normalization(lrelu_11, training=True)
+        drop_11 = tf.layers.dropout(bn_11, rate=drop_rate)
+
+
+        x_12 = tf.layers.conv2d(drop_11, 512, [3, 3], [1, 1], padding="same")
+        lrelu_12 = leaky_relu(x_12, alpha)
+        bn_12 = tf.layers.batch_normalization(lrelu_12, training=True)
+        drop_12 = tf.layers.dropout(bn_12, rate=drop_rate)
+
+
+        pool_4 = tf.layers.max_pooling2d(drop_12, [2, 2], [2, 2], padding="same")
+
+        x_13 = tf.layers.conv2d(pool_4, 512, [3, 3], [1, 1], padding="same")
+        lrelu_13 = leaky_relu(x_13, alpha)
+        bn_13 = tf.layers.batch_normalization(lrelu_13, training=True)
+        drop_13 = tf.layers.dropout(bn_13, rate=drop_rate)
+
+
+        x_14 = tf.layers.conv2d(drop_13, 512, [3, 3], [1, 1], padding="same")
+        lrelu_14 = leaky_relu(x_14, alpha)
+        bn_14 = tf.layers.batch_normalization(lrelu_14, training=True)
+        drop_14 = tf.layers.dropout(bn_14, rate=drop_rate)
+
+
+        x_15 = tf.layers.conv2d(drop_14, 512, [3, 3], [1, 1], padding="same")
+        lrelu_15 = leaky_relu(x_15, alpha)
+        bn_15 = tf.layers.batch_normalization(lrelu_15, training=True)
+        drop_15 = tf.layers.dropout(bn_15, rate=drop_rate)
+
+
+        x_16 = tf.layers.conv2d(drop_15, 512, [3, 3], [1, 1], padding="same")
+        lrelu_16 = leaky_relu(x_16, alpha)
+        bn_16 = tf.layers.batch_normalization(lrelu_16, training=True)
+        drop_16 = tf.layers.dropout(bn_16, rate=drop_rate)
+
+
+        pool_5 = tf.layers.max_pooling2d(drop_16, [ 2, 2], [2, 2], padding="same")
+
+        features = tf.reduce_mean(pool_5, (1, 2))
         class_logits = tf.layers.dense(features, num_classes + extra_class)
-
         if extra_class:
             real_class_logits, fake_class_logits = tf.split(class_logits, [num_classes, 1], 1)
             assert fake_class_logits.get_shape()[1] == 1, fake_class_logits.get_shape()
@@ -203,6 +378,9 @@ def discriminator(x, reuse=False, alpha=0.2, drop_rate=0., num_classes=10, size_
         return out, class_logits, gan_logits, features
 
 
+
+
+    ################ Generator #####################
 def generator(z, output_dim, reuse=False, alpha=0.2, training=True, size_mult=128):
     result_file.write("\n##############################################\n")
     result_file.write("\nGenerator Architecture: ")
@@ -232,7 +410,9 @@ def generator(z, output_dim, reuse=False, alpha=0.2, training=True, size_mult=12
         return out
 
 
-def model_loss(input_real, input_z, output_dim, y, num_classes, label_mask, alpha=0.2, drop_rate=0.):
+
+##############################################
+def model_loss(input_real, input_z, output_dim, y, num_classes, label_mask, alpha=0.2, drop_rate=0.5):
     """
     Get the loss for the discriminator and generator
     :param input_real: Images from the real dataset
@@ -248,7 +428,7 @@ def model_loss(input_real, input_z, output_dim, y, num_classes, label_mask, alph
     # These numbers multiply the size of each layer of the generator and the discriminator,
     # respectively. You can reduce them to run your code faster for debugging purposes.
     g_size_mult = 32
-    d_size_mult = 64
+    d_size_mult = 32
 
     # Here we run the generator and the discriminator
     g_model = generator(input_z, output_dim, alpha=alpha, size_mult=g_size_mult)
@@ -319,7 +499,7 @@ def model_opt(d_loss, g_loss, learning_rate, beta1):
 
     return d_train_opt, g_train_opt, shrink_lr
 
-
+##############################################
 class GAN:
     """
     A GAN model.
@@ -347,6 +527,7 @@ class GAN:
         self.d_opt, self.g_opt, self.shrink_lr = model_opt(self.d_loss, self.g_loss, self.learning_rate, beta1)
 
 
+##############################################
 def train(net, dataset, epochs, batch_size, z_size, figsize=(5, 5)):
     saver = tf.train.Saver()
     sample_z = np.random.normal(0, 1, size=(50, z_size))
@@ -426,30 +607,16 @@ def train(net, dataset, epochs, batch_size, z_size, figsize=(5, 5)):
 
 
 ####MAIN####
-
-
-# learning_rate = 0.01
-# real_size = (32, 32, 3)
-# z_size = 100
-# net = GAN(real_size, z_size, learning_rate)
-# dataset = Dataset(trainset, testset)
-#
-# batch_size = 32
-# epochs = 100
-# train_accuracies, test_accuracies, samples = train(net, dataset, epochs, batch_size, figsize=(10, 5))
-#
-
-#
 def main():
     parser = argparse.ArgumentParser(description='Model parameters.')
     parser.add_argument('--batch_size', type=int, default=32)
     parser.add_argument('--dataset', type=str, default='Top_10', choices=['Top_10', 'Top_20', 'Top_30', 'Top_41'])
-    parser.add_argument('--learning_rate', type=float, default=1e-4)
+    parser.add_argument('--learning_rate', type=float, default=0.1)
     #parser.add_argument('--update_rate', type=int, default=5)
     parser.add_argument('--epochs', type=int, default=100)
     parser.add_argument('--z_size', type=int, default=100)
     parser.add_argument('--num_classes', type=int, default=10)
-    parser.add_argument('--dropout_rate', type=float, default=0.)
+    parser.add_argument('--dropout_rate', type=float, default=0.5)
     parser.add_argument('--alpha', type=float, default=0.2)
     parser.add_argument('--data_dir', type=str)
     parser.add_argument('--out_dir', type=str)
@@ -457,7 +624,6 @@ def main():
     args = parser.parse_args()
     global result_file
     temp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    #result_file = open("/Users/nouraahmed/Desktop/"+temp+".text", 'w')
     result_file = open(args.out_dir + "/"+temp+".text", 'w')
     result_file.write("Settings:")
     result_file.write("\nBatch_size: " + str(args.batch_size))
@@ -472,11 +638,12 @@ def main():
 
     #Create and load data
     load_create_data(args.data_dir)
-    #load_create_data("/Users/nouraahmed/Desktop/Top_10_no_aug")
     net = GAN(real_size, args.z_size, args.learning_rate)
     global dataset
     dataset = Dataset(trainset, testset)
     train_accuracies, test_accuracies, samples = train(net, dataset, args.epochs, args.batch_size, args.z_size, figsize=(10, 5))
     result_file.close()
+
+
 if __name__ == "__main__":
     main()
