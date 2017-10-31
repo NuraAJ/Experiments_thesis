@@ -1,0 +1,4 @@
+  File "SSGAN_VGG19.py", line 617
+    self.d_loss, self.g_loss, self.correct, self.masked_correct, self.samples = loss_results
+    ^
+IndentationError: unexpected indent

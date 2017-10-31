@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "SSGAN_VGG19.py", line 29, in <module>
+    random.seed(42)
+AttributeError: 'builtin_function_or_method' object has no attribute 'seed'

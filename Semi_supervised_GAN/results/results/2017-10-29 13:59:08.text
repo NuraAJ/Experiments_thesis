@@ -1,0 +1,10 @@
+Settings:
+Batch_size: 1
+Epochs: 1
+Learning Rate: 0.01
+Dataset: Top_10
+Z size: 100
+Real size: (32, 32, 3)
+Number of classes: 10
+Dropout rate: 0.0
+DATA DIR: /fscratch/users/aljaafn/ssgan/data/IMAGES_AUG_SMALLER_SIZE32/Top_10

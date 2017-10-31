@@ -1,0 +1,92 @@
+Settings:
+Batch_size: 1
+Epochs: 1
+Learning Rate: 0.01
+Dataset: Top_10
+Z size: 100
+Real size: (32, 32, 3)
+Number of classes: 10
+Dropout rate: 0.0
+DATA DIR: /fscratch/users/aljaafn/ssgan/data/IMAGES_AUG_SMALLER_SIZE32/Top_10
+##############################################
+
+Generator Architecture: 
+FC_1
+batch_normalization
+Leaky Relu
+Deconvolution
+batch_normalization
+Leaky Relu
+Deconvolution
+batch_normalization
+Leaky Relu
+Deconvolution
+Activation(Tanh)
+
+##############################################
+
+##############################################
+
+Discriminator Architecture: 
+Input 
+Conv2d(inputs, filters= 64, kernel_size=3, strides=2, padding='same') 
+leaky_relu 
+batch_normalization 
+Dropout
+
+Conv2d(d1, filters= 64, kernel_size=3, strides=2, padding='same') 
+leaky_relu 
+batch_normalization 
+Dropout
+
+Conv2d(d2, filters= 64, kernel_size=3, strides=2, padding='same') 
+leaky_relu 
+batch_normalization 
+Dropout
+
+Conv2d(d3, filters= 2 * 64, kernel_size=3, strides=1, padding='same') 
+leaky_relu 
+batch_normalization 
+Dropout
+
+Conv2d(d4, filters= 2 * 64, kernel_size=3, strides=1, padding='valid') 
+leaky_relu
+
+FC
+SoftMax
+
+##############################################
+
+##############################################
+
+Discriminator Architecture: 
+Input 
+Conv2d(inputs, filters= 64, kernel_size=3, strides=2, padding='same') 
+leaky_relu 
+batch_normalization 
+Dropout
+
+Conv2d(d1, filters= 64, kernel_size=3, strides=2, padding='same') 
+leaky_relu 
+batch_normalization 
+Dropout
+
+Conv2d(d2, filters= 64, kernel_size=3, strides=2, padding='same') 
+leaky_relu 
+batch_normalization 
+Dropout
+
+Conv2d(d3, filters= 2 * 64, kernel_size=3, strides=1, padding='same') 
+leaky_relu 
+batch_normalization 
+Dropout
+
+Conv2d(d4, filters= 2 * 64, kernel_size=3, strides=1, padding='valid') 
+leaky_relu
+
+FC
+SoftMax
+
+##############################################
+
+Epoch0

@@ -1,0 +1,38 @@
+Settings:
+Batch_size: 32
+Epochs: 100
+Learning Rate: 0.01
+Dataset: Top_10
+Z size: 100
+Real size: (32, 32, 3)
+Number of classes: 10
+Dropout rate: 0.5
+DATA DIR: /fscratch/users/aljaafn/ssgan/data/IMAGES_SMALLER_SIZE32_NO_AUG/Top_10
+##############################################
+
+Generator Architecture: 
+FC_1
+batch_normalization
+Leaky Relu
+Deconvolution
+batch_normalization
+Leaky Relu
+Deconvolution
+batch_normalization
+Leaky Relu
+Deconvolution
+Activation(Tanh)
+
+##############################################
+
+##############################################
+
+Discriminator Architecture: 
+##############################################
+
+##############################################
+
+Discriminator Architecture: 
+##############################################
+
+Epoch0

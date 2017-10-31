@@ -1,0 +1,1550 @@
+2017-10-31 15:18:46.248956: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-31 15:18:46.249894: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-31 15:18:46.249909: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-31 15:18:54.567336: I tensorflow/core/common_runtime/gpu/gpu_device.cc:940] Found device 0 with properties: 
+name: Tesla K20m
+major: 3 minor: 5 memoryClockRate (GHz) 0.7055
+pciBusID 0000:0d:00.0
+Total memory: 4.63GiB
+Free memory: 4.56GiB
+2017-10-31 15:18:54.567599: I tensorflow/core/common_runtime/gpu/gpu_device.cc:961] DMA: 0 
+2017-10-31 15:18:54.567613: I tensorflow/core/common_runtime/gpu/gpu_device.cc:971] 0:   Y 
+2017-10-31 15:18:54.567630: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K20m, pci bus id: 0000:0d:00.0)
+2017-10-31 15:19:09.576725: I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 1780 get requests, put_count=1565 evicted_count=1000 eviction_rate=0.638978 and unsatisfied allocation rate=0.738764
+2017-10-31 15:19:09.576954: I tensorflow/core/common_runtime/gpu/pool_allocator.cc:259] Raising pool_size_limit_ from 100 to 110
+2017-10-31 15:19:36.655421: I tensorflow/core/common_runtime/gpu/pool_allocator.cc:247] PoolAllocator: After 2398 get requests, put_count=2425 evicted_count=1000 eviction_rate=0.412371 and unsatisfied allocation rate=0.415346
+2017-10-31 15:19:36.655698: I tensorflow/core/common_runtime/gpu/pool_allocator.cc:259] Raising pool_size_limit_ from 256 to 281
+
+###################################################
+
+
+Generator Architecture
+
+FC_1
+batch_normalization
+Leaky Relu
+
+Deconvolution
+batch_normalization
+Leaky Relu
+
+Deconvolution
+batch_normalization
+Leaky Relu
+
+Deconvolution
+Activation(Tanh)
+
+
+###################################################
+
+
+###################################################
+
+
+Discriminator Architecture
+
+Input Image
+
+conv2d(Input, filters, kernel_size, strides, padding)
+
+
+conv2d(x, 64, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(x, 64, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+max_pooling2d(drop_2, [ 2, 2], [2, 2], padding='same')
+
+
+conv2d(pool_1, 128, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_3, 128, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+max_pooling2d(drop_4, [ 2, 2], [2, 2], padding='same')
+
+
+conv2d(pool_2, 256, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_5, 256, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_6, 256, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_7, 256, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+max_pooling2d(drop_8, [ 2, 2], [2, 2], padding='same')
+
+
+conv2d(pool_3, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_9, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_10, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_11, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+max_pooling2d(drop_12, [ 2, 2], [2, 2], padding='same')
+
+
+conv2d(pool_4, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_13, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_14, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_15, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+max_pooling2d(drop_16, [ 2, 2], [2, 2], padding='same')
+
+
+Fully connected layer
+
+SoftMax
+
+
+###################################################
+
+
+###################################################
+
+
+Discriminator Architecture
+
+Input Image
+
+conv2d(Input, filters, kernel_size, strides, padding)
+
+
+conv2d(x, 64, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(x, 64, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+max_pooling2d(drop_2, [ 2, 2], [2, 2], padding='same')
+
+
+conv2d(pool_1, 128, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_3, 128, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+max_pooling2d(drop_4, [ 2, 2], [2, 2], padding='same')
+
+
+conv2d(pool_2, 256, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_5, 256, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_6, 256, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_7, 256, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+max_pooling2d(drop_8, [ 2, 2], [2, 2], padding='same')
+
+
+conv2d(pool_3, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_9, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_10, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_11, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+max_pooling2d(drop_12, [ 2, 2], [2, 2], padding='same')
+
+
+conv2d(pool_4, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_13, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_14, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+conv2d(drop_15, 512, [3, 3], [1, 1], padding='same')
+Leaky_relu
+Batch normalization
+Dropout
+
+
+max_pooling2d(drop_16, [ 2, 2], [2, 2], padding='same')
+
+
+Fully connected layer
+
+SoftMax
+
+
+###################################################
+
+128
+Epoch 0
+		Classifier train accuracy:  0.248479582971
+		Classifier test accuracy 0.28125
+		Step time:  2.3990840911865234
+		Epoch time:  18.913079977035522
+Epoch 1
+		Classifier train accuracy:  0.331016507385
+		Classifier test accuracy 0.2890625
+		Step time:  0.9957635402679443
+		Epoch time:  15.337052345275879
+Epoch 2
+		Classifier train accuracy:  0.321459600348
+		Classifier test accuracy 0.234375
+		Step time:  0.801846981048584
+		Epoch time:  14.604163885116577
+Epoch 3
+		Classifier train accuracy:  0.335360556038
+		Classifier test accuracy 0.3125
+		Step time:  0.8031754493713379
+		Epoch time:  14.603135108947754
+Epoch 4
+		Classifier train accuracy:  0.344048653345
+		Classifier test accuracy 0.359375
+		Step time:  0.7978005409240723
+		Epoch time:  14.943098068237305
+Epoch 5
+		Classifier train accuracy:  0.384013900956
+		Classifier test accuracy 0.359375
+		Step time:  0.8002538681030273
+		Epoch time:  14.660327911376953
+Epoch 6
+		Classifier train accuracy:  0.405734144222
+		Classifier test accuracy 0.28125
+		Step time:  0.804811954498291
+		Epoch time:  14.599099159240723
+Epoch 7
+		Classifier train accuracy:  0.359687228497
+		Classifier test accuracy 0.375
+		Step time:  0.8076610565185547
+		Epoch time:  15.40781021118164
+Epoch 8
+		Classifier train accuracy:  0.392701998262
+		Classifier test accuracy 0.3984375
+		Step time:  0.8029835224151611
+		Epoch time:  14.679303169250488
+Epoch 9
+		Classifier train accuracy:  0.42832319722
+		Classifier test accuracy 0.4296875
+		Step time:  0.8057684898376465
+		Epoch time:  14.653430461883545
+Epoch 10
+		Classifier train accuracy:  0.497827975673
+		Classifier test accuracy 0.4453125
+		Step time:  0.808250904083252
+		Epoch time:  15.227025985717773
+Epoch 11
+		Classifier train accuracy:  0.539530842745
+		Classifier test accuracy 0.375
+		Step time:  0.7966418266296387
+		Epoch time:  14.628478527069092
+Epoch 12
+		Classifier train accuracy:  0.5977410947
+		Classifier test accuracy 0.4296875
+		Step time:  0.7975971698760986
+		Epoch time:  14.5716233253479
+Epoch 13
+		Classifier train accuracy:  0.630755864466
+		Classifier test accuracy 0.4140625
+		Step time:  0.7927324771881104
+		Epoch time:  15.075857400894165
+Epoch 14
+		Classifier train accuracy:  0.735013032146
+		Classifier test accuracy 0.4765625
+		Step time:  0.8009181022644043
+		Epoch time:  14.643816709518433
+Epoch 15
+		Classifier train accuracy:  0.761077324066
+		Classifier test accuracy 0.46875
+		Step time:  0.9028270244598389
+		Epoch time:  14.829649448394775
+Epoch 16
+		Classifier train accuracy:  0.827106863597
+		Classifier test accuracy 0.4609375
+		Step time:  0.8080551624298096
+		Epoch time:  14.76021146774292
+Epoch 17
+		Classifier train accuracy:  0.832319721981
+		Classifier test accuracy 0.4296875
+		Step time:  0.8018386363983154
+		Epoch time:  14.600019216537476
+Epoch 18
+		Classifier train accuracy:  0.906168549088
+		Classifier test accuracy 0.4765625
+		Step time:  0.8041541576385498
+		Epoch time:  14.584283828735352
+Epoch 19
+		Classifier train accuracy:  0.92267593397
+		Classifier test accuracy 0.453125
+		Step time:  0.8444411754608154
+		Epoch time:  15.21755051612854
+Epoch 20
+		Classifier train accuracy:  0.946133796699
+		Classifier test accuracy 0.40625
+		Step time:  0.8023056983947754
+		Epoch time:  14.609047412872314
+Epoch 21
+		Classifier train accuracy:  0.954821894005
+		Classifier test accuracy 0.4765625
+		Step time:  0.8036608695983887
+		Epoch time:  14.553455591201782
+Epoch 22
+		Classifier train accuracy:  0.964378801043
+		Classifier test accuracy 0.46875
+		Step time:  0.8052237033843994
+		Epoch time:  15.12397313117981
+Epoch 23
+		Classifier train accuracy:  0.975673327541
+		Classifier test accuracy 0.4609375
+		Step time:  0.8025679588317871
+		Epoch time:  14.685933113098145
+Epoch 24
+		Classifier train accuracy:  0.978279756733
+		Classifier test accuracy 0.4765625
+		Step time:  0.8072059154510498
+		Epoch time:  14.78531265258789
+Epoch 25
+		Classifier train accuracy:  0.98696785404
+		Classifier test accuracy 0.4296875
+		Step time:  0.8083171844482422
+		Epoch time:  15.151263952255249
+Epoch 26
+		Classifier train accuracy:  0.985230234579
+		Classifier test accuracy 0.46875
+		Step time:  0.8054578304290771
+		Epoch time:  14.677073240280151
+Epoch 27
+		Classifier train accuracy:  0.98696785404
+		Classifier test accuracy 0.4375
+		Step time:  0.8082380294799805
+		Epoch time:  15.22481894493103
+Epoch 28
+		Classifier train accuracy:  0.990443092963
+		Classifier test accuracy 0.46875
+		Step time:  0.7919363975524902
+		Epoch time:  14.604875564575195
+Epoch 29
+		Classifier train accuracy:  0.98696785404
+		Classifier test accuracy 0.4609375
+		Step time:  0.8020994663238525
+		Epoch time:  14.577796936035156
+Epoch 30
+		Classifier train accuracy:  0.992180712424
+		Classifier test accuracy 0.453125
+		Step time:  0.799807071685791
+		Epoch time:  15.313044309616089
+Epoch 31
+		Classifier train accuracy:  0.995655951347
+		Classifier test accuracy 0.484375
+		Step time:  0.804584264755249
+		Epoch time:  14.630877017974854
+Epoch 32
+		Classifier train accuracy:  0.991311902693
+		Classifier test accuracy 0.5078125
+		Step time:  0.8040401935577393
+		Epoch time:  14.62207818031311
+Epoch 33
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.4609375
+		Step time:  0.8030655384063721
+		Epoch time:  15.29265284538269
+Epoch 34
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.8015608787536621
+		Epoch time:  14.607919216156006
+Epoch 35
+		Classifier train accuracy:  0.996524761077
+		Classifier test accuracy 0.4765625
+		Step time:  0.7970712184906006
+		Epoch time:  15.225126504898071
+Epoch 36
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.4609375
+		Step time:  0.8073952198028564
+		Epoch time:  14.633503913879395
+Epoch 37
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.8738415241241455
+		Epoch time:  14.681149959564209
+Epoch 38
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4375
+		Step time:  0.8013875484466553
+		Epoch time:  14.774068593978882
+Epoch 39
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.4609375
+		Step time:  0.8028154373168945
+		Epoch time:  14.578973054885864
+Epoch 40
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.8304054737091064
+		Epoch time:  14.876029968261719
+Epoch 41
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.786513090133667
+		Epoch time:  14.70506501197815
+Epoch 42
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4609375
+		Step time:  0.8043968677520752
+		Epoch time:  14.796949863433838
+Epoch 43
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8043801784515381
+		Epoch time:  14.744301795959473
+Epoch 44
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.8138318061828613
+		Epoch time:  14.668742895126343
+Epoch 45
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4765625
+		Step time:  0.8030085563659668
+		Epoch time:  14.605211019515991
+Epoch 46
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8053431510925293
+		Epoch time:  14.945196390151978
+Epoch 47
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4609375
+		Step time:  0.8035130500793457
+		Epoch time:  14.639278411865234
+Epoch 48
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.453125
+		Step time:  0.9263477325439453
+		Epoch time:  14.791649580001831
+Epoch 49
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8029375076293945
+		Epoch time:  14.658507347106934
+Epoch 50
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4765625
+		Step time:  0.8020138740539551
+		Epoch time:  14.646659135818481
+Epoch 51
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8046262264251709
+		Epoch time:  14.634602069854736
+Epoch 52
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8071761131286621
+		Epoch time:  15.065136432647705
+Epoch 53
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.7820994853973389
+		Epoch time:  14.594592809677124
+Epoch 54
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.804692268371582
+		Epoch time:  14.85881495475769
+Epoch 55
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4453125
+		Step time:  0.7896590232849121
+		Epoch time:  14.630118608474731
+Epoch 56
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.8007898330688477
+		Epoch time:  14.98939824104309
+Epoch 57
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.5
+		Step time:  0.8072662353515625
+		Epoch time:  14.620731830596924
+Epoch 58
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8401517868041992
+		Epoch time:  14.821993827819824
+Epoch 59
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.5078125
+		Step time:  0.803391695022583
+		Epoch time:  14.660488843917847
+Epoch 60
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4921875
+		Step time:  0.804107666015625
+		Epoch time:  14.599950790405273
+Epoch 61
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8031294345855713
+		Epoch time:  15.235657453536987
+Epoch 62
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8001220226287842
+		Epoch time:  14.61742115020752
+Epoch 63
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.5
+		Step time:  0.8054296970367432
+		Epoch time:  15.120975255966187
+Epoch 64
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8044934272766113
+		Epoch time:  14.569077491760254
+Epoch 65
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.9074640274047852
+		Epoch time:  14.97272539138794
+Epoch 66
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.803058385848999
+		Epoch time:  14.811770915985107
+Epoch 67
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.453125
+		Step time:  0.8055546283721924
+		Epoch time:  14.62723708152771
+Epoch 68
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.7994112968444824
+		Epoch time:  14.874759435653687
+Epoch 69
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8009641170501709
+		Epoch time:  14.576223373413086
+Epoch 70
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4921875
+		Step time:  0.803875207901001
+		Epoch time:  14.645729780197144
+Epoch 71
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.5
+		Step time:  0.7824647426605225
+		Epoch time:  14.949599981307983
+Epoch 72
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8027043342590332
+		Epoch time:  14.601372480392456
+Epoch 73
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.802236795425415
+		Epoch time:  14.635293006896973
+Epoch 74
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.4921875
+		Step time:  0.8009989261627197
+		Epoch time:  15.010512590408325
+Epoch 75
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.7927298545837402
+		Epoch time:  14.611578226089478
+Epoch 76
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8040320873260498
+		Epoch time:  14.605179786682129
+Epoch 77
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.802027702331543
+		Epoch time:  14.608661651611328
+Epoch 78
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.515625
+		Step time:  0.7924740314483643
+		Epoch time:  14.612242460250854
+Epoch 79
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8729283809661865
+		Epoch time:  14.995717525482178
+Epoch 80
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4609375
+		Step time:  0.9988582134246826
+		Epoch time:  15.371924638748169
+Epoch 81
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4765625
+		Step time:  0.8057916164398193
+		Epoch time:  14.645437240600586
+Epoch 82
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8040661811828613
+		Epoch time:  14.610800504684448
+Epoch 83
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.4765625
+		Step time:  0.7910990715026855
+		Epoch time:  14.597741603851318
+Epoch 84
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5078125
+		Step time:  0.8025827407836914
+		Epoch time:  14.656424045562744
+Epoch 85
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4609375
+		Step time:  0.8021111488342285
+		Epoch time:  15.364901542663574
+Epoch 86
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8036911487579346
+		Epoch time:  14.633045673370361
+Epoch 87
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.7819850444793701
+		Epoch time:  14.588175773620605
+Epoch 88
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.808419942855835
+		Epoch time:  14.95499062538147
+Epoch 89
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4921875
+		Step time:  0.8019990921020508
+		Epoch time:  14.612901449203491
+Epoch 90
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.7847912311553955
+		Epoch time:  15.029191255569458
+Epoch 91
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.7987239360809326
+		Epoch time:  14.609058380126953
+Epoch 92
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.4765625
+		Step time:  0.8051064014434814
+		Epoch time:  15.044652462005615
+Epoch 93
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.7979142665863037
+		Epoch time:  14.632352590560913
+Epoch 94
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4921875
+		Step time:  0.8067519664764404
+		Epoch time:  14.635770320892334
+Epoch 95
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4609375
+		Step time:  0.797447681427002
+		Epoch time:  15.018635272979736
+Epoch 96
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8027403354644775
+		Epoch time:  14.560822010040283
+Epoch 97
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.8020420074462891
+		Epoch time:  14.634433507919312
+Epoch 98
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.4921875
+		Step time:  0.8021891117095947
+		Epoch time:  14.881371974945068
+Epoch 99
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.8047664165496826
+		Epoch time:  14.591130018234253
+Epoch 100
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8028616905212402
+		Epoch time:  14.6267671585083
+Epoch 101
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.9049651622772217
+		Epoch time:  14.871355056762695
+Epoch 102
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8034107685089111
+		Epoch time:  14.705132246017456
+Epoch 103
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5078125
+		Step time:  0.805150032043457
+		Epoch time:  14.624367713928223
+Epoch 104
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8060059547424316
+		Epoch time:  14.652389526367188
+Epoch 105
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.8061647415161133
+		Epoch time:  15.073283672332764
+Epoch 106
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.802741527557373
+		Epoch time:  14.628424167633057
+Epoch 107
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.5
+		Step time:  0.9889249801635742
+		Epoch time:  14.98669958114624
+Epoch 108
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.8020443916320801
+		Epoch time:  14.60971450805664
+Epoch 109
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.8051788806915283
+		Epoch time:  14.607430934906006
+Epoch 110
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.8046112060546875
+		Epoch time:  14.89560580253601
+Epoch 111
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.798469066619873
+		Epoch time:  14.574573755264282
+Epoch 112
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.7985672950744629
+		Epoch time:  15.607321739196777
+Epoch 113
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8042643070220947
+		Epoch time:  14.62334656715393
+Epoch 114
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4765625
+		Step time:  1.007523775100708
+		Epoch time:  15.66674017906189
+Epoch 115
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4453125
+		Step time:  0.8037302494049072
+		Epoch time:  14.629267692565918
+Epoch 116
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.7879104614257812
+		Epoch time:  14.57524824142456
+Epoch 117
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5078125
+		Step time:  0.8001594543457031
+		Epoch time:  14.890120506286621
+Epoch 118
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.8039884567260742
+		Epoch time:  14.60002589225769
+Epoch 119
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.8023207187652588
+		Epoch time:  14.58448076248169
+Epoch 120
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4921875
+		Step time:  0.8040456771850586
+		Epoch time:  14.743597984313965
+Epoch 121
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8104007244110107
+		Epoch time:  14.585174322128296
+Epoch 122
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8057997226715088
+		Epoch time:  14.951017618179321
+Epoch 123
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.4765625
+		Step time:  0.8044393062591553
+		Epoch time:  14.633113384246826
+Epoch 124
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8085753917694092
+		Epoch time:  14.651342153549194
+Epoch 125
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8052995204925537
+		Epoch time:  14.81816554069519
+Epoch 126
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.8032183647155762
+		Epoch time:  14.598566055297852
+Epoch 127
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4765625
+		Step time:  0.7970130443572998
+		Epoch time:  14.95951247215271
+Epoch 128
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5078125
+		Step time:  0.8023710250854492
+		Epoch time:  14.618508338928223
+Epoch 129
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.802107572555542
+		Epoch time:  14.611525774002075
+Epoch 130
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.8029744625091553
+		Epoch time:  15.108092546463013
+Epoch 131
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.453125
+		Step time:  0.8014473915100098
+		Epoch time:  14.601840734481812
+Epoch 132
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4609375
+		Step time:  0.8025963306427002
+		Epoch time:  14.62394380569458
+Epoch 133
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.801713228225708
+		Epoch time:  14.808331489562988
+Epoch 134
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.7931616306304932
+		Epoch time:  14.623565673828125
+Epoch 135
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.7988462448120117
+		Epoch time:  14.608490228652954
+Epoch 136
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.79886794090271
+		Epoch time:  15.052636861801147
+Epoch 137
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.5078125
+		Step time:  0.8041551113128662
+		Epoch time:  14.615362644195557
+Epoch 138
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.7999329566955566
+		Epoch time:  14.601233720779419
+Epoch 139
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.806065559387207
+		Epoch time:  14.631402015686035
+Epoch 140
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4921875
+		Step time:  0.7964320182800293
+		Epoch time:  14.595921516418457
+Epoch 141
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8011021614074707
+		Epoch time:  15.006218194961548
+Epoch 142
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8020079135894775
+		Epoch time:  14.6092209815979
+Epoch 143
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8053548336029053
+		Epoch time:  14.6403226852417
+Epoch 144
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4453125
+		Step time:  0.8040816783905029
+		Epoch time:  14.637843132019043
+Epoch 145
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.453125
+		Step time:  0.8021998405456543
+		Epoch time:  14.999590873718262
+Epoch 146
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4609375
+		Step time:  0.804363489151001
+		Epoch time:  14.59298062324524
+Epoch 147
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.7980575561523438
+		Epoch time:  14.562098741531372
+Epoch 148
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.811086893081665
+		Epoch time:  14.878137350082397
+Epoch 149
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.8051967620849609
+		Epoch time:  14.623619079589844
+Epoch 150
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.8066399097442627
+		Epoch time:  14.561602354049683
+Epoch 151
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4765625
+		Step time:  0.8145027160644531
+		Epoch time:  14.967987537384033
+Epoch 152
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.8054134845733643
+		Epoch time:  14.605088710784912
+Epoch 153
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.8013873100280762
+		Epoch time:  14.614847898483276
+Epoch 154
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4609375
+		Step time:  0.8225595951080322
+		Epoch time:  15.15352177619934
+Epoch 155
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8020055294036865
+		Epoch time:  14.63403582572937
+Epoch 156
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4765625
+		Step time:  0.8022871017456055
+		Epoch time:  14.586108684539795
+Epoch 157
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.5
+		Step time:  0.8067197799682617
+		Epoch time:  15.608847856521606
+Epoch 158
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8019130229949951
+		Epoch time:  14.560012102127075
+Epoch 159
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.453125
+		Step time:  0.8031725883483887
+		Epoch time:  14.619290113449097
+Epoch 160
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4609375
+		Step time:  0.8007252216339111
+		Epoch time:  14.987346172332764
+Epoch 161
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.7998504638671875
+		Epoch time:  14.980559825897217
+Epoch 162
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.7963995933532715
+		Epoch time:  14.601312160491943
+Epoch 163
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.7985458374023438
+		Epoch time:  14.955013275146484
+Epoch 164
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.8033995628356934
+		Epoch time:  14.604701519012451
+Epoch 165
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8018898963928223
+		Epoch time:  14.59125828742981
+Epoch 166
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.8035905361175537
+		Epoch time:  14.79273509979248
+Epoch 167
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8041386604309082
+		Epoch time:  14.612820386886597
+Epoch 168
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.8187527656555176
+		Epoch time:  15.06425666809082
+Epoch 169
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.802558183670044
+		Epoch time:  14.876030921936035
+Epoch 170
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8037006855010986
+		Epoch time:  14.612326622009277
+Epoch 171
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.515625
+		Step time:  0.8023068904876709
+		Epoch time:  14.640640020370483
+Epoch 172
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.7924866676330566
+		Epoch time:  14.957262992858887
+Epoch 173
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.8006927967071533
+		Epoch time:  14.628376960754395
+Epoch 174
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4609375
+		Step time:  0.7999491691589355
+		Epoch time:  14.660319089889526
+Epoch 175
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4609375
+		Step time:  0.8034131526947021
+		Epoch time:  15.110284805297852
+Epoch 176
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4609375
+		Step time:  0.8067820072174072
+		Epoch time:  14.649052858352661
+Epoch 177
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8015315532684326
+		Epoch time:  14.611576080322266
+Epoch 178
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4921875
+		Step time:  0.9901432991027832
+		Epoch time:  15.061926364898682
+Epoch 179
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4765625
+		Step time:  0.8068201541900635
+		Epoch time:  14.791872262954712
+Epoch 180
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.8028762340545654
+		Epoch time:  14.603513956069946
+Epoch 181
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.804877758026123
+		Epoch time:  14.624379396438599
+Epoch 182
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8044240474700928
+		Epoch time:  15.04329776763916
+Epoch 183
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.5078125
+		Step time:  0.7962660789489746
+		Epoch time:  14.62697148323059
+Epoch 184
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.453125
+		Step time:  0.8040900230407715
+		Epoch time:  14.634819507598877
+Epoch 185
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4921875
+		Step time:  0.806727409362793
+		Epoch time:  14.938674926757812
+Epoch 186
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8048686981201172
+		Epoch time:  14.570754528045654
+Epoch 187
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8255524635314941
+		Epoch time:  14.629125595092773
+Epoch 188
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4765625
+		Step time:  0.8057065010070801
+		Epoch time:  14.970249652862549
+Epoch 189
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4453125
+		Step time:  0.7989528179168701
+		Epoch time:  14.586361408233643
+Epoch 190
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4609375
+		Step time:  0.815781831741333
+		Epoch time:  14.89037036895752
+Epoch 191
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.8065102100372314
+		Epoch time:  14.598597526550293
+Epoch 192
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.8024296760559082
+		Epoch time:  14.577340841293335
+Epoch 193
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.8061826229095459
+		Epoch time:  15.090088844299316
+Epoch 194
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4765625
+		Step time:  0.8027980327606201
+		Epoch time:  14.60709285736084
+Epoch 195
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.9737131595611572
+		Epoch time:  14.908323049545288
+Epoch 196
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8033452033996582
+		Epoch time:  14.952590465545654
+Epoch 197
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.7970149517059326
+		Epoch time:  14.576602697372437
+Epoch 198
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8296501636505127
+		Epoch time:  14.750782251358032
+Epoch 199
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4609375
+		Step time:  0.806480884552002
+		Epoch time:  14.805996417999268
+Epoch 200
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.8029866218566895
+		Epoch time:  14.619007110595703
+Epoch 201
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4609375
+		Step time:  0.8056190013885498
+		Epoch time:  14.931671619415283
+Epoch 202
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8018133640289307
+		Epoch time:  14.61847972869873
+Epoch 203
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.8057916164398193
+		Epoch time:  14.666213035583496
+Epoch 204
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.8141708374023438
+		Epoch time:  15.70537805557251
+Epoch 205
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.7953534126281738
+		Epoch time:  14.596661567687988
+Epoch 206
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.5
+		Step time:  0.7822446823120117
+		Epoch time:  14.580106973648071
+Epoch 207
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.8027012348175049
+		Epoch time:  15.044947385787964
+Epoch 208
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.7990860939025879
+		Epoch time:  14.579889059066772
+Epoch 209
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.80434250831604
+		Epoch time:  14.620585441589355
+Epoch 210
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.4765625
+		Step time:  0.8055064678192139
+		Epoch time:  15.067757368087769
+Epoch 211
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.805340051651001
+		Epoch time:  14.652041673660278
+Epoch 212
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.7983577251434326
+		Epoch time:  14.603265762329102
+Epoch 213
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.46875
+		Step time:  0.8072264194488525
+		Epoch time:  15.60635757446289
+Epoch 214
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.802703857421875
+		Epoch time:  14.636487245559692
+Epoch 215
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.805020809173584
+		Epoch time:  14.857246398925781
+Epoch 216
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4921875
+		Step time:  0.7949206829071045
+		Epoch time:  14.740415334701538
+Epoch 217
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4765625
+		Step time:  0.80548095703125
+		Epoch time:  14.595338821411133
+Epoch 218
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.484375
+		Step time:  0.8047418594360352
+		Epoch time:  14.924693584442139
+Epoch 219
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8052902221679688
+		Epoch time:  14.649061918258667
+Epoch 220
+		Classifier train accuracy:  0.998262380539
+		Classifier test accuracy 0.46875
+		Step time:  0.7998740673065186
+		Epoch time:  14.550439357757568
+Epoch 221
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4609375
+		Step time:  0.8028712272644043
+		Epoch time:  15.02354645729065
+Epoch 222
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8027992248535156
+		Epoch time:  14.618587493896484
+Epoch 223
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.46875
+		Step time:  0.8044164180755615
+		Epoch time:  14.758872747421265
+Epoch 224
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.5078125
+		Step time:  0.8033864498138428
+		Epoch time:  14.585331678390503
+Epoch 225
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.8227849006652832
+		Epoch time:  14.816845178604126
+Epoch 226
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.453125
+		Step time:  0.8008031845092773
+		Epoch time:  14.738942384719849
+Epoch 227
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.8039562702178955
+		Epoch time:  14.620885372161865
+Epoch 228
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.5234375
+		Step time:  0.852668285369873
+		Epoch time:  14.71718955039978
+Epoch 229
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.484375
+		Step time:  0.8061931133270264
+		Epoch time:  14.805793523788452
+Epoch 230
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.46875
+		Step time:  0.8033246994018555
+		Epoch time:  14.627793550491333
+Epoch 231
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.7826473712921143
+		Epoch time:  14.971412658691406
+Epoch 232
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.5
+		Step time:  0.7995522022247314
+		Epoch time:  14.569010734558105
+Epoch 233
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.7945041656494141
+		Epoch time:  14.601637840270996
+Epoch 234
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4453125
+		Step time:  0.7970352172851562
+		Epoch time:  14.775605201721191
+Epoch 235
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.5078125
+		Step time:  0.8012008666992188
+		Epoch time:  14.648002624511719
+Epoch 236
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.453125
+		Step time:  0.8028819561004639
+		Epoch time:  14.906986713409424
+Epoch 237
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.453125
+		Step time:  0.8039753437042236
+		Epoch time:  14.5998694896698
+Epoch 238
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.8036375045776367
+		Epoch time:  14.600273847579956
+Epoch 239
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.8058900833129883
+		Epoch time:  14.961795806884766
+Epoch 240
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5
+		Step time:  0.7991321086883545
+		Epoch time:  14.571563005447388
+Epoch 241
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.8551778793334961
+		Epoch time:  14.888773679733276
+Epoch 242
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.4609375
+		Step time:  0.8064868450164795
+		Epoch time:  14.654413223266602
+Epoch 243
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.8007917404174805
+		Epoch time:  14.643527507781982
+Epoch 244
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.8066277503967285
+		Epoch time:  14.909903526306152
+Epoch 245
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.5234375
+		Step time:  0.8012082576751709
+		Epoch time:  14.57768201828003
+Epoch 246
+		Classifier train accuracy:  0.999131190269
+		Classifier test accuracy 0.484375
+		Step time:  0.7977180480957031
+		Epoch time:  14.569106578826904
+Epoch 247
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4921875
+		Step time:  0.8098428249359131
+		Epoch time:  14.976295471191406
+Epoch 248
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.4765625
+		Step time:  0.801173210144043
+		Epoch time:  15.058294773101807
+Epoch 249
+		Classifier train accuracy:  1.0
+		Classifier test accuracy 0.453125
+		Step time:  0.7920010089874268
+		Epoch time:  14.594026565551758
+slurmstepd: error: Exceeded step memory limit at some point.

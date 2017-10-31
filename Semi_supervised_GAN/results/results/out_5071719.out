@@ -1,0 +1,116 @@
+2017-10-30 22:27:04.690969: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-30 22:27:04.691175: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-30 22:27:04.691185: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-30 22:27:04.691190: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-30 22:27:04.691194: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+2017-10-30 22:27:05.999803: I tensorflow/core/common_runtime/gpu/gpu_device.cc:940] Found device 0 with properties: 
+name: Tesla P100-PCIE-16GB
+major: 6 minor: 0 memoryClockRate (GHz) 1.3285
+pciBusID 0000:03:00.0
+Total memory: 15.89GiB
+Free memory: 15.60GiB
+2017-10-30 22:27:05.999844: I tensorflow/core/common_runtime/gpu/gpu_device.cc:961] DMA: 0 
+2017-10-30 22:27:05.999850: I tensorflow/core/common_runtime/gpu/gpu_device.cc:971] 0:   Y 
+2017-10-30 22:27:05.999861: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla P100-PCIE-16GB, pci bus id: 0000:03:00.0)
+2017-10-30 22:29:00.580970: E tensorflow/stream_executor/cuda/cuda_blas.cc:543] failed to run cuBLAS routine cublasSgemm_v2: CUBLAS_STATUS_EXECUTION_FAILED
+2017-10-30 22:29:00.581661: I tensorflow/stream_executor/stream.cc:4163] stream 0x42c8cf0 did not memzero GPU location; source: 0x2b83e4ad6f40
+128
+Epoch 0
+Traceback (most recent call last):
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/client/session.py", line 1139, in _do_call
+    return fn(*args)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/client/session.py", line 1121, in _run_fn
+    status, run_metadata)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/contextlib.py", line 88, in __exit__
+    next(self.gen)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/framework/errors_impl.py", line 466, in raise_exception_on_not_ok_status
+    pywrap_tensorflow.TF_GetCode(status))
+tensorflow.python.framework.errors_impl.InternalError: Blas GEMM launch failed : a.shape=(32, 100), b.shape=(32, 2048), m=100, n=2048, k=32
+	 [[Node: gradients_1/generator/dense/MatMul_grad/MatMul_1 = MatMul[T=DT_FLOAT, transpose_a=true, transpose_b=false, _device="/job:localhost/replica:0/task:0/gpu:0"](_arg_input_z_0_1/_429, gradients_1/generator/dense/BiasAdd_grad/tuple/control_dependency)]]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "SSGAN_VGG19.py", line 651, in <module>
+    main()
+  File "SSGAN_VGG19.py", line 646, in main
+    train_accuracies, test_accuracies, samples = train(net, dataset, args.epochs, args.batch_size, args.z_size, figsize=(10, 5))
+  File "SSGAN_VGG19.py", line 561, in train
+    net.y: y, net.label_mask: label_mask})
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/client/session.py", line 789, in run
+    run_metadata_ptr)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/client/session.py", line 997, in _run
+    feed_dict_string, options, run_metadata)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/client/session.py", line 1132, in _do_run
+    target_list, options, run_metadata)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/client/session.py", line 1152, in _do_call
+    raise type(e)(node_def, op, message)
+tensorflow.python.framework.errors_impl.InternalError: Blas GEMM launch failed : a.shape=(32, 100), b.shape=(32, 2048), m=100, n=2048, k=32
+	 [[Node: gradients_1/generator/dense/MatMul_grad/MatMul_1 = MatMul[T=DT_FLOAT, transpose_a=true, transpose_b=false, _device="/job:localhost/replica:0/task:0/gpu:0"](_arg_input_z_0_1/_429, gradients_1/generator/dense/BiasAdd_grad/tuple/control_dependency)]]
+
+Caused by op 'gradients_1/generator/dense/MatMul_grad/MatMul_1', defined at:
+  File "SSGAN_VGG19.py", line 651, in <module>
+    main()
+  File "SSGAN_VGG19.py", line 643, in main
+    net = GAN(real_size, args.z_size, args.learning_rate, args.num_classes)
+  File "SSGAN_VGG19.py", line 529, in __init__
+    self.d_opt, self.g_opt, self.shrink_lr = model_opt(self.d_loss, self.g_loss, self.learning_rate, beta1)
+  File "SSGAN_VGG19.py", line 499, in model_opt
+    g_train_opt = tf.train.AdamOptimizer(learning_rate, beta1=beta1).minimize(g_loss, var_list=g_vars)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/training/optimizer.py", line 315, in minimize
+    grad_loss=grad_loss)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/training/optimizer.py", line 386, in compute_gradients
+    colocate_gradients_with_ops=colocate_gradients_with_ops)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/ops/gradients_impl.py", line 540, in gradients
+    grad_scope, op, func_call, lambda: grad_fn(op, *out_grads))
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/ops/gradients_impl.py", line 346, in _MaybeCompile
+    return grad_fn()  # Exit early
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/ops/gradients_impl.py", line 540, in <lambda>
+    grad_scope, op, func_call, lambda: grad_fn(op, *out_grads))
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/ops/math_grad.py", line 825, in _MatMulGrad
+    grad_b = math_ops.matmul(a, grad, transpose_a=True)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/ops/math_ops.py", line 1816, in matmul
+    a, b, transpose_a=transpose_a, transpose_b=transpose_b, name=name)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/ops/gen_math_ops.py", line 1217, in _mat_mul
+    transpose_b=transpose_b, name=name)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/framework/op_def_library.py", line 767, in apply_op
+    op_def=op_def)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/framework/ops.py", line 2506, in create_op
+    original_op=self._default_original_op, op_def=op_def)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/framework/ops.py", line 1269, in __init__
+    self._traceback = _extract_stack()
+
+...which was originally created as op 'generator/dense/MatMul', defined at:
+  File "SSGAN_VGG19.py", line 651, in <module>
+    main()
+[elided 0 identical lines from previous traceback]
+  File "SSGAN_VGG19.py", line 643, in main
+    net = GAN(real_size, args.z_size, args.learning_rate, args.num_classes)
+  File "SSGAN_VGG19.py", line 526, in __init__
+    drop_rate=self.drop_rate)
+  File "SSGAN_VGG19.py", line 436, in model_loss
+    g_model = generator(input_z, output_dim, alpha=alpha, size_mult=g_size_mult)
+  File "SSGAN_VGG19.py", line 392, in generator
+    x1 = tf.layers.dense(z, 4 * 4 * size_mult * 4)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/layers/core.py", line 215, in dense
+    return layer.apply(inputs)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/layers/base.py", line 492, in apply
+    return self.__call__(inputs, *args, **kwargs)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/layers/base.py", line 441, in __call__
+    outputs = self.call(inputs, *args, **kwargs)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/layers/core.py", line 141, in call
+    outputs = standard_ops.matmul(inputs, self.kernel)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/ops/math_ops.py", line 1816, in matmul
+    a, b, transpose_a=transpose_a, transpose_b=transpose_b, name=name)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/ops/gen_math_ops.py", line 1217, in _mat_mul
+    transpose_b=transpose_b, name=name)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/framework/op_def_library.py", line 767, in apply_op
+    op_def=op_def)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/framework/ops.py", line 2506, in create_op
+    original_op=self._default_original_op, op_def=op_def)
+  File "/sw/csg/machine_learning/2017.01/el7_cudnn5.1_cuda7.5_py3.6_anaconda3env/lib/python3.6/site-packages/tensorflow/python/framework/ops.py", line 1269, in __init__
+    self._traceback = _extract_stack()
+
+InternalError (see above for traceback): Blas GEMM launch failed : a.shape=(32, 100), b.shape=(32, 2048), m=100, n=2048, k=32
+	 [[Node: gradients_1/generator/dense/MatMul_grad/MatMul_1 = MatMul[T=DT_FLOAT, transpose_a=true, transpose_b=false, _device="/job:localhost/replica:0/task:0/gpu:0"](_arg_input_z_0_1/_429, gradients_1/generator/dense/BiasAdd_grad/tuple/control_dependency)]]
+

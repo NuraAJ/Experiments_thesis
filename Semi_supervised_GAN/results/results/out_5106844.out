@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "SSGAN_VGG19.py", line 750, in <module>
+    main()
+  File "SSGAN_VGG19.py", line 730, in main
+    result_file.write("\nReal size        : (" + str(args.input_width) + ", " + args.input_height + ", " + args.input_depth + ")")
+TypeError: must be str, not int
