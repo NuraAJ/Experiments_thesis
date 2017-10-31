@@ -25,7 +25,19 @@ import argparse
 from time import gmtime, strftime
 np.random.seed(42)
 
-
+#Load the images from the given directory
+#Images should be saved like:
+#Parent Dir-
+#-----------Class 1
+#----------------Image_1.jpg
+#----------------Image_2.jpg
+#----------------Image_3.jpg
+#----------------....
+#----------------Image_m.jpg
+#-----------Class 2
+#-----------Class 3
+# . . .
+#-----------Class n
 
 def load_create_data(DATA_DIR):
     global extra_class
